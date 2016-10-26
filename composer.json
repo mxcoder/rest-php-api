@@ -1,0 +1,40 @@
+{
+    "name": "mxcoder/gog-php-api",
+    "author": "ricardoe@gmail.com",
+    "license": "MIT",
+    "require": {
+        "slim/slim": "^3.5.0",
+        "propel/propel": "~2.0@dev",
+        "monolog/monolog": "^1.21"
+    },
+    "autoload": {
+        "psr-4": {
+            "GOG\\Models\\": ["api/src/models/", "tmp/generated/php/GOG/Models/"],
+            "GOG\\Controllers\\": "api/src/controllers"
+        },
+        "files": [
+            "api/config/constants.php"
+        ]
+    },
+    "scripts": {
+        "init-propel": [
+            "@regenerate-propel",
+            "@generate-propel-db"
+        ],
+        "regenerate-propel": [
+            "@generate-propel-config",
+            "@generate-propel-models"
+        ],
+        "generate-propel-config": "propel config:convert --config-dir api/config/ --output-file propel-runtime.php",
+        "generate-propel-models": "propel model:build --config-dir api/config/",
+        "generate-propel-sql": "rm -f tmp/sqldb.map && propel sql:build --config-dir api/config/",
+        "generate-propel-db": "rm -f tmp/gog.db && propel sql:insert --config-dir api/config/",
+        "generate-propel-rows": "propel sql:insert --config-dir api/config/",
+        "post-install": [
+            "@init-propel"
+        ]
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.2"
+    }
+}

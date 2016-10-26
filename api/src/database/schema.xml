@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="default" defaultIdMethod="native" namespace="GOG\Models\" baseClass="CustomBase">
+    <table name="products" phpName="Product">
+        <column name="id" phpName="Id" type="INTEGER" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="title" phpName="Title" type="VARCHAR" size="255" required="true" />
+        <column name="price" phpName="Price" type="FLOAT" size="6" scale="2" required="true" />
+    </table>
+    <table name="carts" phpName="Cart">
+        <column name="id" phpName="Id" type="INTEGER" required="true" primaryKey="true" autoIncrement="true"/>
+    </table>
+    <table name="product_cart" phpName="ProductCart" isCrossRef="true">
+        <column name="cart_id" phpName="CartId" type="INTEGER" required="true" primaryKey="true"/>
+        <column name="product_id" phpName="ProductId" type="INTEGER" required="true" primaryKey="true"/>
+        <foreign-key foreignTable="carts">
+            <reference local="cart_id" foreign="id"/>
+        </foreign-key>
+        <foreign-key foreignTable="products">
+            <reference local="product_id" foreign="id"/>
+        </foreign-key>
+    </table>
+</database>
