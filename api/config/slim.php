@@ -3,9 +3,9 @@ return [
     'settings' => [
         'displayErrorDetails' => true,
         'logger' => [
-            'name' => 'slim-app',
+            'name' => 'apiLogger',
             'level' => \Monolog\Logger::DEBUG,
-            'path' => TMP_DIR . '/app.log',
+            'path' => TMP_DIR.'/app.log',
         ],
     ],
 ];

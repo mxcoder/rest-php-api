@@ -11,10 +11,10 @@ use Psr\Http\Message\ServerRequestInterface;
 class Products extends Base
 {
     /**
-     * GET action
+     * GET action - List all products / Describe one product
      * @param  ServerRequestInterface $request
      * @param  ResponseInterface      $response
-     * @param  array                  $args
+     * @param  array                  $args      [id => integer], if present describes single product
      * @return ResponseInterface
      */
     public function getAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -23,13 +23,14 @@ class Products extends Base
         if (!empty($args['id'])) {
             $body = $ProductQuery->findPK($args['id'])->toJSON();
         } else {
-            $body = $ProductQuery->find()->toJSON();
+            $page = $request->getQueryParam('page', 1);
+            $body = $ProductQuery->paginate($page, API_LIST_PAGE_SIZE)->toJSON();
         }
         return $response->write($body);
     }
 
     /**
-     * POST action
+     * POST action - Create product
      * @param  ServerRequestInterface $request
      * @param  ResponseInterface      $response
      * @param  array                  $args
@@ -38,6 +39,50 @@ class Products extends Base
     public function postAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $body = $request->getParsedBody();
-        return $response->write(var_dump($body, true));
+        $Product = new ProductModel();
+        $Product->fromArray($body);
+        $Product->save();
+        $this->logger->info("New product: {$Product}");
+        return $response->write($Product->toJSON());
+    }
+
+    /**
+     * PUT action - Update Product
+     * @param  ServerRequestInterface $request
+     * @param  ResponseInterface      $response
+     * @param  array                  $args
+     * @return ResponseInterface
+     */
+    public function putAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $id = isset($args['id']) ? intval($args['id']) : null;
+        if (empty($id)) {
+            throw new \Exception('PUT /products requires a valid numeric ID: /products/[0-9]+');
+        }
+        $body = $request->getParsedBody();
+        $Product = ProductModel::findPK($id);
+        $Product->fromArray($body);
+        $Product->save();
+        $this->logger->info("Updated product: {$Product}");
+        return $response->write($Product->toJSON());
+    }
+
+    /**
+     * DELETE action - Delete Product
+     * @param  ServerRequestInterface $request
+     * @param  ResponseInterface      $response
+     * @param  array                  $args
+     * @return ResponseInterface
+     */
+    public function deleteAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $id = isset($args['id']) ? intval($args['id']) : null;
+        if (empty($id)) {
+            throw new \Exception('DELETE /products requires a valid numeric ID: /products/[0-9]+');
+        }
+        $Product = ProductModel::findPK($id);
+        $Product->delete();
+        $this->logger->info("Deleted product: {$Product}");
+        return $response->write($Product->toJSON());
     }
 }

@@ -18,7 +18,8 @@ return [
             'connections' => [
                 'default' => [
                     'adapter' => 'sqlite',
-                    'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
+                    // 'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
+                    'classname' => 'Propel\Runtime\Connection\DebugPDO',
                     'dsn' => 'sqlite:'.TMP_DIR.'/gog.db',
                     'user' => 'na',
                     'password' => 'na',
@@ -35,14 +36,14 @@ return [
                 'defaultLogger' => [
                     'type' => 'stream',
                     'path' => TMP_DIR.'/propel.log',
-                    'level' => 100
+                    'level' => \Monolog\Logger::DEBUG
                 ],
             ],
         ],
         'generator' => [
             'defaultConnection' => 'default',
             'connections' => ['default'],
-            'platformClass' => 'Propel\Generator\Platform\SqlitePlatform',
+            // 'platformClass' => 'Propel\Generator\Platform\SqlitePlatform',
             'dateTime' => [
                 'useDateTimeClass' => true,
             ],

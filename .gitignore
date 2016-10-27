@@ -1,4 +1,4 @@
-composer.phar
-/vendor/
-/tmp/*
 /api/config/propel-runtime.php
+/vendor/
+/tests/_output/*
+/tmp/*
