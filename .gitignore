@@ -1,4 +1,5 @@
 /api/config/propel-runtime.php
 /vendor/
-/tests/_output/*
+/tests/_output/
+/tests/_support/
 /tmp/*

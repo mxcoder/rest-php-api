@@ -64,8 +64,20 @@ class Base
         try {
             $response = $this->$classMethod($request, $response, $args);
         } catch (\Exception $e) {
-            $response->withJson(['error' => $e->getMessage()]);
+            $response = $response->withJson(['error' => $e->getMessage()]);
         }
         return $response;
+    }
+
+    /**
+     * Helper method to throw from Controllers
+     * @param  string          $message
+     * @param  \Exception|null $previous
+     * @throws \Exception
+     * @return null
+     */
+    protected function _throw($message, \Exception $previous = null)
+    {
+        throw new \Exception($message, 1, $previous);
     }
 }

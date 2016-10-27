@@ -20,5 +20,7 @@ class ListCest
         $I->sendGET('/api/v1/products/');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
         $I->seeResponseIsJson();
+        $products = $I->grabDataFromResponseByJsonPath('$.*');
+        $I->assertEquals(LIST_PAGE_SIZE, count($products));
     }
 }

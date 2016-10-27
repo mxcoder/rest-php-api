@@ -13,7 +13,7 @@
             "GOG\\Controllers\\": "api/src/controllers"
         },
         "files": [
-            "api/config/constants.php"
+            "globals.php"
         ]
     },
     "scripts": {

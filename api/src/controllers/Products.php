@@ -22,12 +22,12 @@ class Products extends Base
         $id = isset($args['id']) ? intval($args['id']) : null;
         $ProductQuery = ProductModel::createQuery();
         if (!empty($id)) {
-            $body = $ProductQuery->findPK($args['id']) or _throw("Product {$id} cannot be found.");
+            $body = $ProductQuery->findPK($args['id']) or $this->_throw("Product {$id} cannot be found.");
         } else {
             $page = $request->getQueryParam('page', 1);
-            $body = $ProductQuery->paginate($page, API_LIST_PAGE_SIZE);
+            $body = $ProductQuery->paginate($page, LIST_PAGE_SIZE);
         }
-        return $response->write($body->toJSON());
+        return $response->withJson($body->toArray());
     }
 
     /**
@@ -44,7 +44,7 @@ class Products extends Base
         $Product->fromArray($body);
         $Product->save();
         $this->logger->info("New product: {$Product}");
-        return $response->write($Product->toJSON());
+        return $response->withJson($Product->toArray());
     }
 
     /**
@@ -61,11 +61,11 @@ class Products extends Base
             throw new \Exception('PUT /products requires a valid numeric ID: /products/[0-9]+');
         }
         $body = $request->getParsedBody();
-        $Product = ProductModel::findPK($id) or _throw("Product {$id} cannot be found.");
+        $Product = ProductModel::findPK($id) or $this->_throw("Product {$id} cannot be found.");
         $Product->fromArray($body);
         $Product->save();
         $this->logger->info("Updated product: {$Product}");
-        return $response->write($Product->toJSON());
+        return $response->withJson($Product->toArray());
     }
 
     /**
@@ -84,6 +84,6 @@ class Products extends Base
         $Product = ProductModel::findPK($id) or _throw("Product {$id} cannot be found.");
         $Product->delete();
         $this->logger->info("Deleted product: {$Product}");
-        return $response->write($Product->toJSON());
+        return $response->withJson($Product->toArray());
     }
 }
