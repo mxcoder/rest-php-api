@@ -26,7 +26,7 @@ class Carts extends Base
      * @param  array                  $args
      * @return ResponseInterface
      */
-    public function getAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    final public function getAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         return $response->write($this->Cart->toJSON());
     }
@@ -38,7 +38,7 @@ class Carts extends Base
      * @param  array                  $args
      * @return ResponseInterface
      */
-    public function postAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    final public function postAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         return $response->write($this->Cart->toJSON());
     }
@@ -50,7 +50,7 @@ class Carts extends Base
      * @param  array                  $args
      * @return ResponseInterface
      */
-    public function putAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    final public function putAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         return $response->write($this->Cart->toJSON());
     }

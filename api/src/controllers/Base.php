@@ -23,25 +23,6 @@ class Base
     }
 
     /**
-     * @param  ServerRequestInterface $request
-     * @param  ResponseInterface      $response
-     * @param  array                  $args
-     * @return ResponseInterface
-     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
-    {
-        $httpMethod = strtolower($request->getMethod() ?: 'GET');
-        $actionArg = isset($args['action']) ? ucfirst(strtolower($args['action'])) : 'Action';
-        $classMethod = "{$httpMethod}{$actionArg}";
-        try {
-            $response = $this->$classMethod($request, $response, $args);
-        } catch (\Exception $e) {
-            $response->write(json_encode(['error' => $e->getMessage()]));
-        }
-        return $response;
-    }
-
-    /**
      * Home route
      * @param  ServerRequestInterface $request
      * @param  ResponseInterface      $response
@@ -63,9 +44,28 @@ class Base
      */
     public static function propelMiddleWare(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        $response->getBody()->write('BEFORE');
+        // $response->getBody()->write('BEFORE');
         $response = $next($request, $response);
-        $response->getBody()->write('AFTER');
+        // $response->getBody()->write('AFTER');
+        return $response;
+    }
+
+    /**
+     * @param  ServerRequestInterface $request
+     * @param  ResponseInterface      $response
+     * @param  array                  $args
+     * @return ResponseInterface
+     */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $httpMethod = strtolower($request->getMethod() ?: 'GET');
+        $actionArg = isset($args['action']) ? ucfirst(strtolower($args['action'])) : 'Action';
+        $classMethod = "{$httpMethod}{$actionArg}";
+        try {
+            $response = $this->$classMethod($request, $response, $args);
+        } catch (\Exception $e) {
+            $response->withJson(['error' => $e->getMessage()]);
+        }
         return $response;
     }
 }

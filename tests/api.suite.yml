@@ -1,0 +1,7 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - Asserts
+        - REST:
+            url: 'http://localhost:8888'
+            depends: PhpBrowser

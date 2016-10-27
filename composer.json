@@ -32,9 +32,12 @@
         "generate-propel-rows": "propel sql:insert --config-dir api/config/",
         "post-install": [
             "@init-propel"
-        ]
+        ],
+        "test-api": "codecept run api"
     },
     "require-dev": {
-        "codeception/codeception": "^2.2"
+        "codeception/codeception": "~2.1",
+        "codeception/phpbuiltinserver": "*",
+        "flow/jsonpath": "^0.3.4"
     }
 }

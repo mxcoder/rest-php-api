@@ -30,7 +30,7 @@ class Product extends BaseProduct
     public function preSave(ConnectionInterface $con = null)
     {
         if (strlen($this->getTitle()) < 5 || strlen($this->getTitle()) > 255) {
-            throw new \Exception('Product name length must be at least 5 chars and maximum 255 chars');
+            throw new \Exception('Product title length must be at least 5 chars and maximum 255 chars');
         }
         if ($this->getPrice() <= 0) {
             throw new \Exception('Produce price must be a valid positive amount');

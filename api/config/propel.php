@@ -49,8 +49,7 @@ return [
             ],
             'namespaceAutoPackage' => true,
             'objectModel' => [
-                'addClassLevelComment' => false,
-                'defaultKeyType' => 'fieldName',
+                'addClassLevelComment' => false
             ]
         ]
     ]
