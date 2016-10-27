@@ -30,7 +30,7 @@
         "generate-propel-sql": "rm -f tmp/sqldb.map && propel sql:build --config-dir api/config/",
         "generate-propel-db": "rm -f tmp/gog.db && propel sql:insert --config-dir api/config/",
         "generate-propel-rows": "propel sql:insert --config-dir api/config/",
-        "post-install": [
+        "post-install-cmd": [
             "@init-propel"
         ],
         "test-api": "codecept run api"
