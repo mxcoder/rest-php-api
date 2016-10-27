@@ -81,7 +81,7 @@ class Products extends Base
         if (empty($id)) {
             throw new \Exception('DELETE /products requires a valid numeric ID: /products/[0-9]+');
         }
-        $Product = ProductModel::findPK($id) or _throw("Product {$id} cannot be found.");
+        $Product = ProductModel::findPK($id) or $this->_throw("Product {$id} cannot be found.");
         $Product->delete();
         $this->logger->info("Deleted product: {$Product}");
         return $response->withJson($Product->toArray());

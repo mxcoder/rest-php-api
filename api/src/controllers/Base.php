@@ -64,7 +64,7 @@ class Base
         try {
             $response = $this->$classMethod($request, $response, $args);
         } catch (\Exception $e) {
-            $response = $response->withJson(['error' => $e->getMessage()]);
+            $response = $response->withJson(['error' => $e->getMessage()])->withStatus(500);
         }
         return $response;
     }

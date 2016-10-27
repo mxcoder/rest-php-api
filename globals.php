@@ -8,3 +8,4 @@ define('IS_PRODUCTION', ENVIRONMENT === 'PRODUCTION');
 
 // API GET page size
 define('LIST_PAGE_SIZE', 3);
+define('NON_EXISTING_ID', 999999999);
