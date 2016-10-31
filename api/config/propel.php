@@ -1,6 +1,4 @@
 <?php
-require_once 'constants.php';
-
 return [
     'propel' => [
         'general' => [

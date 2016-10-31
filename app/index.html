@@ -65,7 +65,7 @@
                 <tr v-for="_product in products">
                     <td>{{ _product.Title }}</td>
                     <td>{{ _product.Price }}</td>
-                    <td><a href="#" v-on:click="changeCart('ADD', _product.Id)"><span class="text-primary glyphicon glyphicon-shopping-cart"></span></a></td>
+                    <td><a href="#" v-if="cart" v-on:click="changeCart('ADD', _product.Id)"><span class="text-primary glyphicon glyphicon-shopping-cart"></span></a></td>
                     <td><a href="#" v-on:click="product = _product"><span class="text-warning glyphicon glyphicon-edit"></span></a></td>
                     <td><a href="#" v-on:click="deleteProduct(_product.Id)"><span class="text-danger glyphicon glyphicon-remove"></span></a></td>
                 </tr>
@@ -163,6 +163,7 @@
                             vm.product = PRODUCT_NEW;
                             vm.page = vm.lastPage - 1;
                             vm.changePage();
+                            vm.getCart();
                         });
                     } else {
                         $.ajax({
@@ -172,6 +173,7 @@
                             success: function(response) {
                                 vm.product = PRODUCT_NEW;
                                 vm.changePage();
+                                vm.getCart();
                             }
                         });
                     }
@@ -188,9 +190,6 @@
                 }
             },
             created: function() {
-                $(document).ajaxSuccess(function(event, jqXHR) {
-                    console.log('success', jqXHR);
-                });
                 $(document).ajaxError(function(event, jqXHR) {
                     vm.error = jqXHR.responseJSON ? jqXHR.responseJSON.error : 'Oops';
                 });

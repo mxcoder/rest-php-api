@@ -5,14 +5,6 @@ use \ApiTester;
 
 class ListCest
 {
-    public function _before(ApiTester $I)
-    {
-    }
-
-    public function _after(ApiTester $I)
-    {
-    }
-
     // tests
     public function listAll(ApiTester $I)
     {

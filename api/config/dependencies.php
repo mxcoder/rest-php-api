@@ -1,6 +1,6 @@
 <?php
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+// Propel connections
+require_once API_DIR.'/config/propel-runtime.php';
 
 // Logger injection
 $container = $app->getContainer();
@@ -13,7 +13,7 @@ $container['logger'] = function ($c) {
 };
 
 $container['notFoundHandler'] = function ($c) {
-    return function (ServerRequestInterface $request, ResponseInterface $response) use ($c) {
+    return function (\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response) use ($c) {
         return $response->withRedirect('/api/');
     };
 };

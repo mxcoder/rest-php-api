@@ -9,6 +9,10 @@
     <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
     <rule ref="Internal.NoCodeFound"><severity>0</severity></rule>
+    <rule ref="PSR2.Methods.MethodDeclaration.Underscore"><severity>0</severity></rule>
     <!-- Excluded paths -->
     <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/tmp/*</exclude-pattern>
+    <exclude-pattern>/api/config/propel-runtime.php</exclude-pattern>
+    <exclude-pattern>/tests/_support/ApiTester.php</exclude-pattern>
 </ruleset>
