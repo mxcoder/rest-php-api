@@ -26,6 +26,7 @@ class Products extends Base
         } else {
             $page = $request->getQueryParam('page', 1);
             $Result = $ProductQuery->paginate($page, LIST_PAGE_SIZE);
+            $response = $response->withHeader('LastPage', $Result->getLastPage());
         }
         return $response->withJson($Result->toArray());
     }
@@ -40,6 +41,9 @@ class Products extends Base
     final public function postAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $body = $request->getParsedBody();
+        if (isset($body['Id'])) {
+            unset($body['Id']);
+        }
         $Product = new ProductModel();
         $Product->fromArray($body);
         $Product->save();

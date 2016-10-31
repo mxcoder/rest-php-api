@@ -38,4 +38,10 @@ class Product extends BaseProduct
 
         return parent::preSave($con);
     }
+
+    public function postDelete(ConnectionInterface $con = null)
+    {
+        (new ProductCartQuery())->filterByProductId($this->getId())->delete($con);
+        return parent::postDelete($con);
+    }
 }

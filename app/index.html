@@ -1,2 +1,203 @@
-<!doctype html>
-Hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GOG.com</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">GOG Products</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><button href="#" v-show="!cart" v-on:click="createCart" class="btn btn-default navbar-btn">Create new Cart</button></li>
+                        <li v-if="cart" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Cart ({{ cart.QtyProducts || 0 }}) <span class="caret" v-show="cart.Products && cart.Products.length"></span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <table class="table table-condensed" style="table-layout:fixed;margin-bottom:0;">
+                                    <tr v-for="product in cart.Products">
+                                        <td>{{ product.Title }}</td>
+                                        <td style="width:40px">
+                                            <a href="#" v-on:click="changeCart('REMOVE', product.Id)" class="btn btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total:</th>
+                                        <td>{{ cart.TotalPrice }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <div class="container">
+            <div v-if="error" class="alert alert-danger" v-on:click="error=null">{{ error }}</div>
+            <h2>Products List</h2>
+            <table class="table table-condensed" style="table-layout:fixed">
+                <tr>
+                    <th>Name</th>
+                    <th style="width:8em">Price</th>
+                    <th style="width:40px"></th>
+                    <th style="width:40px"></th>
+                    <th style="width:40px"></th>
+                </tr>
+                <tr v-for="_product in products">
+                    <td>{{ _product.Title }}</td>
+                    <td>{{ _product.Price }}</td>
+                    <td><a href="#" v-on:click="changeCart('ADD', _product.Id)"><span class="text-primary glyphicon glyphicon-shopping-cart"></span></a></td>
+                    <td><a href="#" v-on:click="product = _product"><span class="text-warning glyphicon glyphicon-edit"></span></a></td>
+                    <td><a href="#" v-on:click="deleteProduct(_product.Id)"><span class="text-danger glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            </table>
+            <div class="btn-group btn-sm">
+                <button class="btn btn-default" :disabled="page === 1" v-on:click="changePage(-1)">Prev page</button>
+                <button class="btn btn-default" :disabled="page >= lastPage" v-on:click="changePage(1)">Next page</button>
+            </div>
+            <h3>Products Form</h3>
+            <form @submit.prevent class="form form-inline">
+                <input type="hidden" v-model="product.Id">
+                <div class="form-group">
+                    <label>
+                        <span>Title</span>
+                        <input type="text" v-model.trim="product.Title" class="form-control">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <span>Price</span>
+                        <input type="text" v-model.number="product.Price" class="form-control">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-warning" v-on:click="changeProduct">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        var API_BASE = '/api/v1',
+            API_PRODS = API_BASE + '/products',
+            API_CARTS = API_BASE + '/carts',
+            PRODUCT_NEW = {
+                Id: null,
+                Title: null,
+                Price: null
+            };
+        vm = new Vue({
+            el: '#app',
+            data: {
+                products: [],
+                product: PRODUCT_NEW,
+                cart: null,
+                carts: null,
+                // UI
+                error: null,
+                page: 1,
+                lastPage: null
+            },
+            methods: {
+                changePage: function(offset) {
+                    this.page += (offset || 0);
+                    if (this.page < 1) {
+                        this.page = 1;
+                    }
+                    var xhr = jQuery.get(API_PRODS + '?page=' + this.page, function(response) {
+                        vm.products = response;
+                        vm.lastPage = ~~(xhr.getResponseHeader('LastPage'));
+                        if (vm.page > vm.lastPage) {
+                            vm.page = vm.lastPage;
+                            vm.changePage();
+                        }
+                    });
+                },
+                getCart: function(cartId) {
+                    jQuery.get(API_CARTS + '/' + (cartId || vm.cart.Id), function(response) {
+                        vm.cart = response;
+                    });
+                },
+                getCarts: function(index) {
+                    jQuery.get(API_CARTS, function(response) {
+                        vm.carts = response;
+                        if (vm.carts[index]) {
+                            vm.getCart(vm.carts[index].Id);
+                        }
+                    });
+                },
+                createCart: function(event) {
+                    jQuery.post(API_CARTS, function(response) { vm.getCarts(0); });
+                },
+                changeCart: function(action, productId) {
+                    $.ajax({
+                        url: API_CARTS + '/' + vm.cart.Id + '/' + action,
+                        method: 'PUT',
+                        data: {products: [productId]},
+                        success: function(response) {
+                            vm.getCart();
+                        }
+                    });
+                },
+                changeProduct: function(event) {
+                    if (vm.product.Id === PRODUCT_NEW.Id) {
+                        jQuery.post(API_PRODS, vm.product, function(response) {
+                            vm.product = PRODUCT_NEW;
+                            vm.page = vm.lastPage - 1;
+                            vm.changePage();
+                        });
+                    } else {
+                        $.ajax({
+                            url: API_PRODS + '/' + vm.product.Id,
+                            method: 'PUT',
+                            data: vm.product,
+                            success: function(response) {
+                                vm.product = PRODUCT_NEW;
+                                vm.changePage();
+                            }
+                        });
+                    }
+                },
+                deleteProduct: function(productId) {
+                    $.ajax({
+                        url: API_PRODS + '/' + productId,
+                        method: 'DELETE',
+                        success: function(response) {
+                            vm.changePage();
+                            vm.getCart();
+                        }
+                    });
+                }
+            },
+            created: function() {
+                $(document).ajaxSuccess(function(event, jqXHR) {
+                    console.log('success', jqXHR);
+                });
+                $(document).ajaxError(function(event, jqXHR) {
+                    vm.error = jqXHR.responseJSON ? jqXHR.responseJSON.error : 'Oops';
+                });
+                this.changePage(0);
+                this.getCarts(0);
+            }
+        });
+    </script>
+</body>
+</html>
