@@ -24,6 +24,9 @@
                     <a class="navbar-brand" href="#">GOG Products</a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/api/docs/" target="apidocs">Check API Docs</a></li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><button href="#" v-show="!cart" v-on:click="createCart" class="btn btn-default navbar-btn">Create new Cart</button></li>
                         <li v-if="cart" class="dropdown">

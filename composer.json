@@ -2,11 +2,12 @@
     "name": "mxcoder/gog-php-api",
     "author": "ricardoe@gmail.com",
     "license": "MIT",
-    "version": "1.0",
+    "version": "1.1",
     "require": {
         "slim/slim": "^3.5.0",
         "propel/propel": "~2.0@dev",
-        "monolog/monolog": "^1.21"
+        "monolog/monolog": "^1.21",
+        "crada/php-apidoc": "@dev"
     },
     "autoload": {
         "psr-4": {
@@ -19,6 +20,7 @@
     },
     "scripts": {
         "initialize": [
+            "@generate-docs",
             "@regenerate-sessions",
             "@regenerate-propel",
             "@generate-propel-db"
@@ -26,6 +28,9 @@
         "test": [
             "@initialize",
             "codecept build && codecept run api"
+        ],
+        "generate-docs": [
+            "php api/docs/generate.php"
         ],
         "regenerate-propel": [
             "@generate-propel-config",

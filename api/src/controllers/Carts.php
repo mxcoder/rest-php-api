@@ -19,6 +19,14 @@ class Carts extends Base
      * @param  array                  $args
      * @return ResponseInterface
      */
+    /**
+     * @ApiDescription(section="Carts", description="List one or many carts in session")
+     * @ApiMethod(type="get")
+     * @ApiRoute(name="/carts/{id}")
+     * @ApiParams(name="id", type="integer", nullable=true, description="Product id", sample="1")
+     * @ApiReturnHeaders(sample="HTTP 200 OK")
+     * @ApiReturn(type="object", sample="{'Id':'int', 'Title':'string', 'Price':'number'}")
+     */
     final public function getAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $id = isset($args['id']) ? intval($args['id']) : null;
@@ -40,6 +48,15 @@ class Carts extends Base
      * @param  array                  $args
      * @return ResponseInterface
      */
+    /**
+     * @ApiDescription(section="Carts", description="Creates a cart")
+     * @ApiMethod(type="post")
+     * @ApiRoute(name="/carts")
+     * @ApiReturnHeaders(sample="HTTP 200 OK")
+     * @ApiReturn(type="object", sample="{'Id':'number', 'QtyProducts':'number','TotalPrice':'number','Products':[]}")
+     * @ApiReturnHeaders(sample="HTTP 500 Internal Server Error")
+     * @ApiReturn(type="object", sample="{'error':'string'}")
+     */
     final public function postAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $my_carts = $this->session('carts');
@@ -58,6 +75,18 @@ class Carts extends Base
      * @param  ResponseInterface      $response
      * @param  array                  $args
      * @return ResponseInterface
+     */
+    /**
+     * @ApiDescription(section="Carts", description="Adds or removes a product from Cart")
+     * @ApiMethod(type="put")
+     * @ApiRoute(name="/carts/{id}/{action}")
+     * @ApiParams(name="id", type="integer", nullable=false, description="Product id", sample="1")
+     * @ApiParams(name="action", type="string", nullable=false, description="Cart operation: ADD or REMOVE", sample="ADD")
+     * @ApiParams(name="products", type="array", description="Product ID or IDs", sample="1")
+     * @ApiReturnHeaders(sample="HTTP 200 OK")
+     * @ApiReturn(type="object", sample="{'Id':'number', 'QtyProducts':'number','TotalPrice':'number','Products':[{'Id':'number','Title':'string','Price':'number'}]}")
+     * @ApiReturnHeaders(sample="HTTP 500 Internal Server Error")
+     * @ApiReturn(type="object", sample="{'error':'string'}")
      */
     final public function putAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
@@ -105,6 +134,15 @@ class Carts extends Base
      * @param  ResponseInterface      $response
      * @param  array                  $args
      * @return ResponseInterface
+     */
+    /**
+     * @ApiDescription(section="Carts", description="Deletes a cart")
+     * @ApiMethod(type="delete")
+     * @ApiRoute(name="/carts/{id}")
+     * @ApiParams(name="id", type="number", nullable="false", description="Cart ID", sample="1")
+     * @ApiReturnHeaders(sample="HTTP 200 OK")
+     * @ApiReturnHeaders(sample="HTTP 500 Internal Server Error")
+     * @ApiReturn(type="object", sample="{'error':'string'}")
      */
     final public function deleteAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
