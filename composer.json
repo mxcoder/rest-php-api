@@ -2,6 +2,7 @@
     "name": "mxcoder/gog-php-api",
     "author": "ricardoe@gmail.com",
     "license": "MIT",
+    "version": "1.0",
     "require": {
         "slim/slim": "^3.5.0",
         "propel/propel": "~2.0@dev",

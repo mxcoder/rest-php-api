@@ -10,10 +10,10 @@ GOG.com RESTful API for:
 1. Clone repository
 1. Run `composer install`
 
-## Tests
+### Tests
 
 1. Run `composer test`
 
-## Development server
+### Start dev server
 
 1. Run `./start.sh`
