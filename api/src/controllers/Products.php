@@ -22,12 +22,12 @@ class Products extends Base
         $id = isset($args['id']) ? intval($args['id']) : null;
         $ProductQuery = ProductModel::createQuery();
         if (!empty($id)) {
-            $body = $ProductQuery->findPK($args['id']) or $this->_throw("Product {$id} cannot be found.");
+            $Result = $ProductQuery->findPK($args['id']) or $this->throwException("Product {$id} cannot be found.");
         } else {
             $page = $request->getQueryParam('page', 1);
-            $body = $ProductQuery->paginate($page, LIST_PAGE_SIZE);
+            $Result = $ProductQuery->paginate($page, LIST_PAGE_SIZE);
         }
-        return $response->withJson($body->toArray());
+        return $response->withJson($Result->toArray());
     }
 
     /**
@@ -61,7 +61,7 @@ class Products extends Base
             throw new \Exception('PUT /products requires a valid numeric ID: /products/[0-9]+');
         }
         $body = $request->getParsedBody();
-        $Product = ProductModel::findPK($id) or $this->_throw("Product {$id} cannot be found.");
+        $Product = ProductModel::findPK($id) or $this->throwException("Product {$id} cannot be found.");
         $Product->fromArray($body);
         $Product->save();
         $this->logger->info("Updated product: {$Product}");
@@ -81,7 +81,7 @@ class Products extends Base
         if (empty($id)) {
             throw new \Exception('DELETE /products requires a valid numeric ID: /products/[0-9]+');
         }
-        $Product = ProductModel::findPK($id) or $this->_throw("Product {$id} cannot be found.");
+        $Product = ProductModel::findPK($id) or $this->throwException("Product {$id} cannot be found.");
         $Product->delete();
         $this->logger->info("Deleted product: {$Product}");
         return $response->withJson($Product->toArray());

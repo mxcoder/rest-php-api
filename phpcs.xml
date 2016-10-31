@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <ruleset name="GumGum Dashboard">
     <description>Coding standard for gog-php-api project.</description>
-    <rule ref="PSR2" />
+    <rule ref="PSR2">
+        <exclude name="Generic.Files.LineLength"/>
+    </rule>
     <rule ref="Squiz.PHP.DiscouragedFunctions"/>
     <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
     <rule ref="Generic.Strings.UnnecessaryStringConcat"/>

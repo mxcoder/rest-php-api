@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="default" defaultIdMethod="native" namespace="GOG\Models\" baseClass="CustomBase">
+<database name="default" defaultIdMethod="native" namespace="GOG\Models\" baseClass="CustomBase" defaultStringFormat="JSON">
     <table name="products" phpName="Product">
         <column name="id" phpName="Id" type="INTEGER" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="title" phpName="Title" type="VARCHAR" size="255" required="true" />

@@ -17,23 +17,26 @@
         ]
     },
     "scripts": {
-        "init-propel": [
+        "initialize": [
+            "@regenerate-sessions",
             "@regenerate-propel",
             "@generate-propel-db"
+        ],
+        "test": [
+            "@initialize",
+            "codecept build && codecept run api"
         ],
         "regenerate-propel": [
             "@generate-propel-config",
             "@generate-propel-models"
         ],
+        "regenerate-sessions": "mkdir -p tmp/sessions/ && rm -f tmp/sessions/*",
         "generate-propel-config": "propel config:convert --config-dir api/config/ --output-file propel-runtime.php",
         "generate-propel-models": "propel model:build --config-dir api/config/",
         "generate-propel-sql": "rm -f tmp/sqldb.map && propel sql:build --config-dir api/config/",
         "generate-propel-db": "rm -f tmp/gog.db && propel sql:insert --config-dir api/config/",
         "generate-propel-rows": "propel sql:insert --config-dir api/config/",
-        "post-install-cmd": [
-            "@init-propel"
-        ],
-        "test-api": "codecept run api"
+        "post-install-cmd": ["@initialize"]
     },
     "require-dev": {
         "codeception/codeception": "~2.1",

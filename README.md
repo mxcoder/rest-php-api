@@ -9,5 +9,11 @@ GOG.com RESTful API for:
 
 1. Clone repository
 1. Run `composer install`
-1. Setup server
-    - For testing purposes: `php -S localhost:8000 -t .`
+
+## Tests
+
+1. Run `composer test`
+
+## Development server
+
+1. Run `./start.sh`

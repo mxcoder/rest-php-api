@@ -5,7 +5,10 @@ define('API_DIR', ROOT_DIR . '/api');
 define('APP_DIR', ROOT_DIR . '/app');
 define('ENVIRONMENT', isset($_ENV['PHPENV']) ? $_ENV['PHPENV'] : 'DEVELOPMENT');
 define('IS_PRODUCTION', ENVIRONMENT === 'PRODUCTION');
-
+// Global settings
+setlocale(LC_ALL, 'en_US.UTF-8');
+session_save_path(TMP_DIR.'/sessions/');
 // API GET page size
 define('LIST_PAGE_SIZE', 3);
 define('NON_EXISTING_ID', 999999999);
+
