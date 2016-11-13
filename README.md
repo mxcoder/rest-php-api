@@ -1,6 +1,6 @@
-# GOG Products & Cart REST API
+# REST Products & Cart API
 
-GOG.com RESTful API for:
+RESTful API for:
 
 - Product CRUD
 - Cart related operations
